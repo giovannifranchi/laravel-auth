@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreProjectRequest;
 use App\Models\Project;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class ProjectController extends Controller
 {
@@ -26,7 +29,7 @@ class ProjectController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.projects.create');
     }
 
     /**
@@ -35,9 +38,19 @@ class ProjectController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreProjectRequest $request)
     {
-        //
+
+        $data = $request->validated();
+        $newProject = new Project();
+        $newProject->fill($data);
+        $newProject->slug = Str::slug($data['title']);
+        if(isset($data['image'])){
+            $newProject->image = Storage::put('uploads', $data['image']);
+        }
+        $newProject->save();
+        return redirect()->route('admin.projects.index');
+
     }
 
     /**
