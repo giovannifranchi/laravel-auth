@@ -9,14 +9,28 @@ import.meta.glob([
     '../img/**'
 ])
 
-
+const switcher = document.getElementById('handle-image');
 const imageInput = document.getElementById('image');
+const fileWrapper = document.querySelector('#image-wrapper');
+const image = document.getElementById('image-field');
 
-imageInput.addEventListener('change', (e)=>{
-    const fileWrapper = document.querySelector('#file-wrapper');
-    fileWrapper.classList.remove('d-none');
-    fileWrapper.classList.add('d-block');
-    const src = URL.createObjectURL(e.target.files[0]);
-    const image = fileWrapper.firstElementChild;
-    image.src = src;
-})
+
+switcher.addEventListener('change', function(){
+    if(switcher.checked){
+        fileWrapper.classList.remove('d-none');
+        fileWrapper.classList.add('d-block')
+    }else {
+        fileWrapper.classList.remove('d-block');
+        fileWrapper.classList.add('d-none')
+    }
+});
+
+imageInput.addEventListener('change', showImg);
+
+
+function showImg(event){
+    if(event.target.files.length > 0){
+        const src = URL.createObjectURL(event.target.files[0]);
+        image.src = src;
+    }
+}
