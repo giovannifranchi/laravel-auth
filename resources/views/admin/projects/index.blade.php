@@ -44,7 +44,7 @@
                                     <p>Are you sure you want to delete this project?</p>
                                 </div>
                                 <div class="modal-footer">
-                                    <form action="{{ route('admin.projects.destroy', $project->id) }}" method="POST">
+                                    <form action="{{ route('admin.projects.destroy', $project) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger">Delete</button>
