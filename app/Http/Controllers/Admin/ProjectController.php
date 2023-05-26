@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreProjectRequest;
+use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Project;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -82,9 +83,27 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateProjectRequest $request, Project $project)
     {
-        //
+        $data = $request->all();
+
+        $project->slug = Str::slug($data['title']);
+
+        if(empty($data['set_image'])){
+            Storage::delete($project->image);
+            $project->image = null;
+        }else {
+            if(isset($data['image'])){
+                if($project->image){
+                    Storage::delete($project->image);
+                }
+                $project->image = Storage::put('uploads', $data['image']);
+            }
+        }
+
+        $project->update($data);
+
+        return redirect()->route('admin.projects.index');
     }
 
     /**
@@ -93,8 +112,12 @@ class ProjectController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Project $project)
     {
-        //
+        if($project->image){
+            Storage::delete($project->image);
+        }
+        $project->delete();
+        return redirect()->route('admin.projects.index');
     }
 }

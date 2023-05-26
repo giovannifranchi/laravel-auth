@@ -26,14 +26,13 @@
             </div>
             <div class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" role="switch" id="handle-image"
-                    @checked($project->image) value="1">
+                    @checked($project->image) value="1" name="set_image">
                 <label class="form-check-label" for="handle-image">Handle Image</label>
             </div>
             <div id="image-wrapper">
                 {{-- fill preview --}}
-                <div class="mb-3  @if (!$project->image) d-none @endif" id="file-wrapper">
-                    <img
-                        @if ($project->image) src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}" @endif id="image-field">
+                <div class="mb-3  @if(!$project->image) d-none @endif" id="file-wrapper">
+                    <img @if($project->image) src="{{ asset('storage/' . $project->image) }}" alt="{{ $project->title }}" @endif id="image-field">
                 </div>
                 {{-- fill preview --}}
 
